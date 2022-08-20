@@ -1,0 +1,26 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-docnow-staging-14321-authRole",
+      "UnauthRoleArn": "arn:aws:iam::008113395780:role/amplify-docnow-staging-14321-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::008113395780:role/amplify-docnow-staging-14321-authRole",
+      "Region": "ca-central-1",
+      "DeploymentBucketName": "amplify-docnow-staging-14321-deployment",
+      "UnauthRoleName": "amplify-docnow-staging-14321-unauthRole",
+      "StackName": "amplify-docnow-staging-14321",
+      "StackId": "arn:aws:cloudformation:ca-central-1:008113395780:stack/amplify-docnow-staging-14321/24535750-1e97-11ed-8e96-0ee92d126352",
+      "AmplifyAppId": "dmfqjizex6asf"
+    },
+    "categories": {
+      "auth": {
+        "docnow135a21e5135a21e5": {}
+      },
+      "function": {
+        "AdminQueries2f5611a5": {
+          "deploymentBucketName": "amplify-docnow-staging-14321-deployment",
+          "s3Key": "amplify-builds/AdminQueries2f5611a5-303548632b776f665045-build.zip"
+        }
+      }
+    }
+  }
+}

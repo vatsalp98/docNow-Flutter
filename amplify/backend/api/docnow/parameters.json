@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "docnow",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authdocnow135a21e5135a21e5",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
