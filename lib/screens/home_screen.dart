@@ -39,9 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       var item = data['listUsers']['items'][index];
                       var clinic = data['listUsers']['items'][index]['clinic']
                           ['items'][0];
-
-                      return homeDocCard(
-                          item['full_name'], clinic['name'], item['expertise']);
+                      return homeDocCard(context, item['id'], item['full_name'],
+                          clinic['name'], item['expertise']);
                     },
                   );
                 }),

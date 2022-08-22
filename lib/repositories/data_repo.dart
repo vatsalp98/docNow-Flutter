@@ -45,4 +45,54 @@ class DataRepo {
       throw (e);
     }
   }
+
+  static fetchDoctorInfo(String id) async {
+    String gdoc = '''query Mquery(\$id: ID!){
+      getUser(id: \$id) {
+        birthday
+        createdAt
+        email
+        expertise
+        full_name
+        gender
+        id
+        isDoctor
+        isSpecialist
+        location
+        serviceLanguages
+        clinic_id
+        clinic {
+          items {
+            id
+            location
+            name
+            serviceLanguages
+            services
+          }
+        }
+      }
+    }''';
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          document: gdoc,
+          apiName: 'docnow',
+          variables: {
+            "id": id,
+          },
+        ),
+      );
+      var response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data['getUser'];
+      }
+    } catch (e) {
+      throw (e);
+    }
+  }
 }

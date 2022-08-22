@@ -31,8 +31,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const ListTile(
+          children: const [
+            ListTile(
               leading: Icon(Icons.person_rounded),
               title: Text('Mon Profile'),
               trailing: Icon(Icons.keyboard_arrow_right_rounded),
@@ -41,10 +41,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
               indent: 15,
               endIndent: 15,
               height: 1,
-              color: Theme.of(context).primaryColor,
+              color: Colors.grey,
             ),
-            Center(
-              child: SignOutButton(),
+            ListTile(
+              leading: Icon(Icons.language_rounded),
+              title: Text('Languages'),
+              trailing: Icon(Icons.keyboard_arrow_right_rounded),
+            ),
+            Divider(
+              indent: 15,
+              endIndent: 15,
+              height: 1,
+              color: Colors.grey,
+            ),
+            ListTile(
+              leading: Icon(Icons.help_center_rounded),
+              title: Text('Help & Support'),
+              trailing: Icon(Icons.keyboard_arrow_right_rounded),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 50.0),
+              child: Center(
+                child: SignOutButton(),
+              ),
             ),
           ],
         ),
