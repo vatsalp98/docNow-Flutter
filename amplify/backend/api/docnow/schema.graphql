@@ -12,6 +12,7 @@ type User @model
   birthday: AWSDateTime
   isDoctor: Boolean!
   expertise: [String]
+  isSpecialist: Boolean
   location: String
   serviceLanguages: [String]
   clinic_id: ID
@@ -27,13 +28,16 @@ type Booking @model
 {
   id: ID!
   doctor_id: ID!
-  patient_id: ID!
+  patient_id: ID
+  clinic_id: ID!
   booking_date: AWSDateTime!
   booking_time: AWSDateTime!
   description: String
   categories: [String]
   location: String
   isActive: Boolean!
+  clinic: Clinic @hasOne(fields: ["clinic_id"])
+  user: User @hasOne(fields: ["doctor_id"])
 }
 
 type Clinic @model 
@@ -49,3 +53,4 @@ type Clinic @model
   services: [String]
   serviceLanguages: [String]
 }
+
