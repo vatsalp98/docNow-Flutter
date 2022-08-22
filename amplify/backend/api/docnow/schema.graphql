@@ -1,13 +1,51 @@
 type User @model
   @auth(rules: [
-    { allow: groups, groups: ["Admin"] },
+    { allow: groups, groups: ["admin"] },
     { allow: public, operations: [read, create] },
     { allow: private, operations: [read, create, update, delete] }
   ])
-  {
-    id: ID!
-    fullName: String!
-    email: String!
-    gender: String
-    birthday: AWSDateTime
-  }
+{
+  id: ID!
+  full_name: String!
+  email: String!
+  gender: String
+  birthday: AWSDateTime
+  isDoctor: Boolean!
+  expertise: [String]
+  location: String
+  serviceLanguages: [String]
+  clinic_id: ID
+  clinic: [Clinic] @hasMany(fields: ["clinic_id"])
+}
+
+type Booking @model 
+  @auth(rules: [
+    { allow: groups, groups: ["admin"] },
+    { allow: public, operations: [read, create] },
+    { allow: private, operations: [read, create, update, delete] }
+  ])
+{
+  id: ID!
+  doctor_id: ID!
+  patient_id: ID!
+  booking_date: AWSDateTime!
+  booking_time: AWSDateTime!
+  description: String
+  categories: [String]
+  location: String
+  isActive: Boolean!
+}
+
+type Clinic @model 
+  @auth(rules: [
+    { allow: groups, groups: ["admin"] },
+    { allow: public, operations: [read, create] },
+    { allow: private, operations: [read, create, update, delete] }
+  ]) 
+{
+  id: ID!
+  name: String!
+  location: String!
+  services: [String]
+  serviceLanguages: [String]
+}

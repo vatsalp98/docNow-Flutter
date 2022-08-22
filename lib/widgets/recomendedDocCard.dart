@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget homeDocCard() {
+Widget homeDocCard(String title, String clinic, List expertise) {
   return Card(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(25),
@@ -41,7 +41,7 @@ Widget homeDocCard() {
                 ),
                 child: Container(
                   width: 180,
-                  height: 50,
+                  height: title.length > 25 ? 55 : 50,
                   decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
@@ -57,25 +57,31 @@ Widget homeDocCard() {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Dr. Anna Khan',
+                          'Dr. ' + title,
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: title.length > 25 ? 12 : 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          'Medicine & Heart Specialist',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                        RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontSize: title.length > 25 ? 11 : 12,
+                              color: Colors.white,
+                            ),
+                            children: [
+                              TextSpan(text: expertise[0] + ' & '),
+                              TextSpan(text: expertise[1]),
+                            ],
                           ),
                         ),
                         Text(
-                          'Good Health Clinic',
+                          clinic,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: title.length > 25 ? 12 : 13,
                             color: Colors.white,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

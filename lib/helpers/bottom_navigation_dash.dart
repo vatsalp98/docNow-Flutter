@@ -1,3 +1,4 @@
+import 'package:docnow/screens/bookings_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/home_screen.dart';
 import '../screens/settings_screen.dart';
@@ -11,9 +12,10 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int currentIndex = 0;
-  final screens = const [
-    MyHomePage(),
-    SettingsScreen(),
+  final screens = [
+    const MyHomePage(),
+    BookingScreen(),
+    const SettingsScreen(),
   ];
 
   @override
@@ -28,8 +30,8 @@ class _DashboardState extends State<Dashboard> {
         // ),
         body: Center(
           child: IndexedStack(
-            children: screens,
             index: currentIndex,
+            children: screens,
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -37,6 +39,10 @@ class _DashboardState extends State<Dashboard> {
             BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded),
               label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_view_day_rounded),
+              label: "Bookings",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_rounded),
@@ -56,14 +62,6 @@ class _DashboardState extends State<Dashboard> {
           onTap: (index) => setState(() {
             currentIndex = index;
           }),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: () {},
-          child: const Icon(
-            Icons.search,
-            size: 30,
-          ),
         ),
       ),
     );
