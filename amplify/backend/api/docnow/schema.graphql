@@ -16,7 +16,9 @@ type User @model
   location: String
   serviceLanguages: [String]
   clinic_id: ID
+  activeHours_id: ID
   clinic: [Clinic] @hasMany(fields: ["clinic_id"])
+  schedule: ActiveHours @hasOne(fields: ["activeHours_id"])
 }
 
 type Booking @model 
@@ -53,4 +55,18 @@ type Clinic @model
   services: [String]
   serviceLanguages: [String]
 }
+
+type ActiveHours @model 
+  @auth(rules: [
+    { allow: groups, groups: ["admin"] },
+    { allow: public, operations: [read, create] },
+    { allow: private, operations: [read, create, update, delete] }
+  ]) 
+{
+  id: ID!
+  user_id: ID!
+  schedule: String!
+  user: User @hasOne (fields: ["user_id"])
+}
+
 

@@ -1,3 +1,4 @@
+import 'package:docnow/screens/activeHours_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 
@@ -31,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             ListTile(
               leading: Icon(Icons.person_rounded),
               title: Text('Mon Profile'),
@@ -46,6 +47,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               leading: Icon(Icons.language_rounded),
               title: Text('Languages'),
+              trailing: Icon(Icons.keyboard_arrow_right_rounded),
+            ),
+            Divider(
+              indent: 15,
+              endIndent: 15,
+              height: 1,
+              color: Colors.grey,
+            ),
+            ListTile(
+              leading: Icon(Icons.hourglass_full_rounded),
+              title: Text('Active Hours'),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return ActiveHourScreen();
+                }));
+              },
               trailing: Icon(Icons.keyboard_arrow_right_rounded),
             ),
             Divider(

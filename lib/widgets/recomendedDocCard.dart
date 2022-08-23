@@ -69,7 +69,7 @@ Widget homeDocCard(BuildContext context, String id, String title, String clinic,
                           Text(
                             'Dr. ' + title,
                             style: TextStyle(
-                              fontSize: title.length > 25 ? 12 : 15,
+                              fontSize: title.length > 22 ? 11 : 15,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
@@ -77,12 +77,15 @@ Widget homeDocCard(BuildContext context, String id, String title, String clinic,
                           RichText(
                             text: TextSpan(
                               style: TextStyle(
-                                fontSize: title.length > 25 ? 11 : 12,
+                                fontSize: title.length > 20 ? 11 : 12,
                                 color: Colors.white,
                               ),
                               children: [
-                                TextSpan(text: expertise[0] + ' & '),
-                                TextSpan(text: expertise[1]),
+                                expertise.length > 1
+                                    ? TextSpan(
+                                        text:
+                                            expertise[0] + ' & ' + expertise[1])
+                                    : TextSpan(text: expertise[0])
                               ],
                             ),
                           ),

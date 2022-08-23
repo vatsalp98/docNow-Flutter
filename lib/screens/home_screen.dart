@@ -31,18 +31,27 @@ class _MyHomePageState extends State<MyHomePage> {
               child: FutureBuilder(
                 future: DataRepo.fetchDoctors(),
                 builder: ((context, snapshot) {
-                  var data = snapshot.data as Map;
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: data['listUsers']['items'].length,
-                    itemBuilder: (context, index) {
-                      var item = data['listUsers']['items'][index];
-                      var clinic = data['listUsers']['items'][index]['clinic']
-                          ['items'][0];
-                      return homeDocCard(context, item['id'], item['full_name'],
-                          clinic['name'], item['expertise']);
-                    },
-                  );
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    var data = snapshot.data as Map;
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data['listUsers']['items'].length,
+                      itemBuilder: (context, index) {
+                        var item = data['listUsers']['items'][index];
+                        var clinic = data['listUsers']['items'][index]['clinic']
+                            ['items'][0];
+                        return homeDocCard(
+                            context,
+                            item['id'],
+                            item['full_name'],
+                            clinic['name'],
+                            item['expertise']);
+                      },
+                    );
+                  } else {
+                    return Center(child: const CircularProgressIndicator());
+                  }
                 }),
               ),
             ),
@@ -87,19 +96,24 @@ class _MyHomePageState extends State<MyHomePage> {
               child: FutureBuilder(
                 future: DataRepo.fetchDoctors(),
                 builder: ((context, snapshot) {
-                  var data = snapshot.data as Map;
-                  return ListView.builder(
-                    itemCount: data['listUsers']['items'].length,
-                    itemBuilder: (context, index) {
-                      var item = data['listUsers']['items'][index];
-                      return ListTile(
-                        title: Text(
-                          item['full_name'],
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      );
-                    },
-                  );
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    var data = snapshot.data as Map;
+                    return ListView.builder(
+                      itemCount: data['listUsers']['items'].length,
+                      itemBuilder: (context, index) {
+                        var item = data['listUsers']['items'][index];
+                        return ListTile(
+                          title: Text(
+                            item['full_name'],
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(child: const CircularProgressIndicator());
+                  }
                 }),
               ),
             ),
