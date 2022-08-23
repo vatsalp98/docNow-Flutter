@@ -19,6 +19,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(
             'Dr. ' + widget.doctorData['full_name'],
@@ -27,6 +28,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
             ),
           ),
           centerTitle: true,
+          backgroundColor: Colors.blue[700],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -42,6 +44,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
               padding: const EdgeInsets.all(5.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   voiceCallButton(widget.doctorData['email']),
                   emailButton(widget.doctorData['email']),
@@ -88,6 +91,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
                 style: TextStyle(
                   fontSize: 14,
+                  color: Colors.black,
                 ),
                 softWrap: true,
               ),

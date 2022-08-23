@@ -49,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
               label: "Settings",
             )
           ],
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.blue[700],
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,

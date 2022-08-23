@@ -93,7 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     itemBuilder: (context, index) {
                       var item = data['listUsers']['items'][index];
                       return ListTile(
-                        title: Text(item['full_name']),
+                        title: Text(
+                          item['full_name'],
+                          style: TextStyle(color: Colors.black),
+                        ),
                       );
                     },
                   );

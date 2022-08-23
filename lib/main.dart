@@ -2,12 +2,21 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:docnow/helpers/bottom_navigation_dash.dart';
 import 'package:docnow/helpers/configure_amplify.dart';
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   configureAmplify();
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('fr')],
+      path: 'assets/languages',
+      fallbackLocale: Locale('en'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,6 +28,9 @@ class MyApp extends StatelessWidget {
     return Authenticator(
       preferPrivateSession: true,
       child: MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         debugShowCheckedModeBanner: false,
         title: 'Doc Now',
         builder: Authenticator.builder(),
