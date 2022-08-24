@@ -41,7 +41,7 @@ class DataRepo {
         final data = json.decode(response.data);
         return data;
       }
-    } catch (e) {
+    } on ApiException catch (e) {
       throw (e);
     }
   }
@@ -91,14 +91,16 @@ class DataRepo {
         final data = json.decode(response.data);
         return data['getUser'];
       }
-    } catch (e) {
+    } on ApiException catch (e) {
       throw (e);
     }
   }
 
-  static createActiveHours(String doctor_id, String schedule) async {
-    String gDoc = '''mutation Mmutation(\$user_id: ID!, \$schedule: String!){
-      createActiveHours(input: {user_id: \$user_id, schedule: \$schedule}) {
+  static createActiveHours(
+      String doctor_id, String schedule, int weekNumber) async {
+    String gDoc =
+        '''mutation Mmutation(\$user_id: ID!, \$schedule: String!, \$weekNumber: Int!){
+      createActiveHours(input: {user_id: \$user_id, schedule: \$schedule, weekNumber: \$weekNumber}) {
         id
       }
     }''';
@@ -119,6 +121,7 @@ class DataRepo {
           variables: {
             "user_id": doctor_id,
             "schedule": schedule,
+            "weekNumber": weekNumber,
           },
         ),
       );
@@ -131,7 +134,44 @@ class DataRepo {
         final data = json.decode(response.data);
         return data;
       }
-    } catch (e) {
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
+  static fetchActiveHours(int weekNumber) async {
+    var user1 = await Amplify.Auth.getCurrentUser();
+    String gDoc = '''query Mquery(\$eq : ID, \$eq1: Int){
+      listActiveHours(filter: {user_id: {eq: \$eq}, weekNumber: {eq: \$eq1}}) {
+        items {
+          id
+          schedule
+          updatedAt
+        }
+      }
+    }''';
+
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {
+            'eq': user1.userId,
+            'eq1': weekNumber,
+          },
+        ),
+      );
+      var response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
       throw (e);
     }
   }

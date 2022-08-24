@@ -1,6 +1,11 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:docnow/screens/activeHours_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_of_year/week_of_year.dart';
+
+import '../bloc/schedule_bloc/schedule_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = 'settings';
@@ -58,11 +63,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               leading: Icon(Icons.hourglass_full_rounded),
               title: Text('Active Hours'),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return ActiveHourScreen();
-                }));
+              onTap: () async {
+                final user = await Amplify.Auth.getCurrentUser();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return BlocProvider(
+                        create: (context) => ScheduleBloc(),
+                        child: ActiveHourScreen(
+                          user_id: user.userId,
+                          scheduleBloc: ScheduleBloc(),
+                          weekNumber: DateTime.now().weekOfYear,
+                        ),
+                      );
+                    },
+                  ),
+                );
               },
               trailing: Icon(Icons.keyboard_arrow_right_rounded),
             ),

@@ -40,6 +40,9 @@ dependencies:
   amplify_authenticator: ^0.2.2
   flutter_hex_color: ^2.0.0
   easy_localization: ^3.0.1
+  week_of_year: ^2.0.0
+  time_range_picker: ^2.2.0
+  flutter_bloc: ^8.1.1
 
 dev_dependencies:
   flutter_test:

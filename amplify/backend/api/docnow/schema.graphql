@@ -66,6 +66,7 @@ type ActiveHours @model
   id: ID!
   user_id: ID!
   schedule: String!
+  weekNumber: Int!
   user: User @hasOne (fields: ["user_id"])
 }
 
