@@ -64,7 +64,7 @@ class _ActiveHourScreenState extends State<ActiveHourScreen> {
         body: BlocBuilder<ScheduleBloc, ScheduleState>(
           bloc: BlocProvider.of(context),
           builder: (context, state) {
-            if (state is ScheduleInitial) {
+            if (state is ScheduleLoaded || state is ScheduleInitial) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
