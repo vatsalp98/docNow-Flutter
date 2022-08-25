@@ -65,7 +65,10 @@ type ActiveHours @model
 {
   id: ID!
   user_id: ID!
-  schedule: String!
+  date: AWSDateTime!
+  startTime: AWSDateTime
+  endTime: AWSDateTime
+  totalSlots: Int!
   weekNumber: Int!
   user: User @hasOne (fields: ["user_id"])
 }

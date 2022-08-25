@@ -96,32 +96,24 @@ class DataRepo {
     }
   }
 
-  static createActiveHours(
-      String doctor_id, String schedule, int weekNumber) async {
+  static createActiveHours(int slotNumber, int weekNumber, String date) async {
+    final user = await Amplify.Auth.getCurrentUser();
     String gDoc =
-        '''mutation Mmutation(\$user_id: ID!, \$schedule: String!, \$weekNumber: Int!){
-      createActiveHours(input: {user_id: \$user_id, schedule: \$schedule, weekNumber: \$weekNumber}) {
+        '''mutation Mmutation(\$user_id: ID!, \$weekNumber: Int!, \$date: AWSDateTime!, \$totalSlots: Int!){
+      createActiveHours(input: {date: \$date, totalSlots: \$totalSlots, user_id: \$user_id, weekNumber: \$weekNumber}) {
         id
       }
     }''';
-    // Map schedule = {
-    //   "monday": "9-18",
-    //   "tuesday": "9-18",
-    //   "wednesday": "9-18",
-    //   "thursday": "9-18",
-    //   "friday": "9-18",
-    //   "saturday": "10-16",
-    //   "sunday": "10-16"
-    // };
     try {
       var operation = Amplify.API.mutate(
         request: GraphQLRequest(
           document: gDoc,
           apiName: 'docnow',
           variables: {
-            "user_id": doctor_id,
-            "schedule": schedule,
+            "user_id": user.userId,
             "weekNumber": weekNumber,
+            "date": date,
+            "totalSlots": slotNumber,
           },
         ),
       );
@@ -145,8 +137,10 @@ class DataRepo {
       listActiveHours(filter: {user_id: {eq: \$eq}, weekNumber: {eq: \$eq1}}) {
         items {
           id
-          schedule
+          date
+          weekNumber
           updatedAt
+          totalSlots
         }
       }
     }''';

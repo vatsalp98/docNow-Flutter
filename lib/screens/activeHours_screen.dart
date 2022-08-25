@@ -56,8 +56,7 @@ class ActiveHourScreen extends StatelessWidget {
                       for (var i = 0; i < 7; i++)
                         dailyActiveHourRow(
                           context,
-                          DateFormat('EEE, dd')
-                              .format(DateTime.now().add(Duration(days: i))),
+                          DateTime.now().add(Duration(days: i)),
                         ),
                       const Padding(
                         padding: EdgeInsets.only(top: 20),
@@ -66,13 +65,13 @@ class ActiveHourScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             context.read<ScheduleBloc>().add(
-                                  UserRefreshScheduleEvent(
+                                  UserSaveScheduleEvent(
                                     weekNumber:
                                         int.parse(weekNumberController.text),
                                   ),
                                 );
                           },
-                          child: Text('Load'),
+                          child: Text('Save'),
                         ),
                       ),
                     ],
@@ -85,6 +84,18 @@ class ActiveHourScreen extends StatelessWidget {
               );
             } else if (state is ScheduleLoading) {
               return Center(child: CircularProgressIndicator());
+            } else if (state is ScheduleSaved) {
+              return AlertDialog(
+                content: Text('Your Schedule has been saved!'),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
             } else {
               return Center(child: Text('There was an error loading!'));
             }
