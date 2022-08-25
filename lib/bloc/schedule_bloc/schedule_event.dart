@@ -8,6 +8,14 @@ class UserUpdateScheduleEvent extends ScheduleEvent {
   final scheduleData;
 }
 
-class UserRefreshScheduleEvent extends ScheduleEvent {}
+class UserRefreshScheduleEvent extends ScheduleEvent {
+  UserRefreshScheduleEvent({required this.weekNumber});
+  final int weekNumber;
+}
 
-class UserCancelScheduleEvent extends ScheduleEvent {}
+class UserExitScheduleEvent extends ScheduleEvent {}
+
+class UserLoadsScheduleEvent extends ScheduleEvent {
+  UserLoadsScheduleEvent({required this.weekNumber});
+  final int weekNumber;
+}

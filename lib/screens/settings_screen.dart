@@ -69,12 +69,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   MaterialPageRoute(
                     builder: (context) {
                       return BlocProvider(
-                        create: (context) => ScheduleBloc(),
-                        child: ActiveHourScreen(
-                          user_id: user.userId,
-                          scheduleBloc: ScheduleBloc(),
-                          weekNumber: DateTime.now().weekOfYear,
-                        ),
+                        create: (context) => ScheduleBloc()
+                          ..add(
+                            UserLoadsScheduleEvent(
+                              weekNumber: DateTime.now().weekOfYear,
+                            ),
+                          ),
+                        child: ActiveHourScreen(),
                       );
                     },
                   ),

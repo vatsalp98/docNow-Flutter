@@ -1,55 +1,15 @@
-// ignore_for_file: unnecessary_string_interpolations
-
-import 'dart:convert';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:docnow/widgets/dailyActiveHourRow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_of_year/week_of_year.dart';
-
+import 'package:intl/intl.dart';
 import '../bloc/schedule_bloc/schedule_bloc.dart';
-import '../repositories/data_repo.dart';
 
-class ActiveHourScreen extends StatefulWidget {
-  ActiveHourScreen(
-      {Key? key,
-      required this.weekNumber,
-      required this.user_id,
-      required this.scheduleBloc})
-      : super(key: key);
+class ActiveHourScreen extends StatelessWidget {
+  ActiveHourScreen({Key? key}) : super(key: key);
 
-  final String user_id;
-  Bloc scheduleBloc;
-  int weekNumber;
-  @override
-  State<ActiveHourScreen> createState() => _ActiveHourScreenState();
-}
-
-class _ActiveHourScreenState extends State<ActiveHourScreen> {
-  TextEditingController weekNumberController = TextEditingController();
-
-  var scheduleData = {};
-
-  @override
-  void initState() {
-    super.initState();
-    weekNumberController.text = widget.weekNumber.toString();
-    Future.delayed(
-      const Duration(seconds: 0),
-      () async {
-        var response = await DataRepo.fetchActiveHours(widget.weekNumber);
-        scheduleData =
-            json.decode(response['listActiveHours']['items'][0]['schedule']);
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    weekNumberController.dispose();
-  }
+  TextEditingController weekNumberController =
+      TextEditingController(text: '34');
 
   @override
   Widget build(BuildContext context) {
@@ -62,107 +22,72 @@ class _ActiveHourScreenState extends State<ActiveHourScreen> {
           backgroundColor: Colors.blue,
         ),
         body: BlocBuilder<ScheduleBloc, ScheduleState>(
-          bloc: BlocProvider.of(context),
+          bloc: context.read<ScheduleBloc>(),
           builder: (context, state) {
-            if (state is ScheduleLoaded || state is ScheduleInitial) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        'Set your Active Hours for the current week Bookings',
+            if (state is ScheduleInitial) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 10, right: 8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Please setup a schedule for the week:',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 19,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Week # ",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 50,
-                            height: 25,
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              keyboardType: TextInputType.number,
-                              controller: weekNumberController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.blue[100],
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.blue,
-                                    width: 2.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              widget.scheduleBloc
-                                  .add(UserRefreshScheduleEvent());
-                            },
-                            icon: Icon(
-                              Icons.refresh_rounded,
-                              size: 20,
-                            ),
-                          ),
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10),
                       ),
-                    ),
-                    // MAking Schedule ROWs
-                    Padding(
-                      padding: const EdgeInsets.only(top: 50.0),
-                      child: Center(
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              Colors.blue[700],
-                            ),
-                          ),
-                          onPressed: () async {},
-                          child: Text('Save'),
+                      Text(
+                        'Week Number: ${DateTime.now().weekOfYear}',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  ],
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      ),
+                      for (var i = 0; i < 7; i++)
+                        dailyActiveHourRow(
+                          context,
+                          DateFormat('EEE, dd')
+                              .format(DateTime.now().add(Duration(days: i))),
+                        ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.read<ScheduleBloc>().add(
+                                  UserRefreshScheduleEvent(
+                                    weekNumber:
+                                        int.parse(weekNumberController.text),
+                                  ),
+                                );
+                          },
+                          child: Text('Load'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
+            } else if (state is ScheduleLoaded) {
+              return Container(
+                child: Text('Loaded'),
+              );
             } else if (state is ScheduleLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is ScheduleCancel) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else
-              return Container();
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return Center(child: Text('There was an error loading!'));
+            }
           },
         ),
       ),
