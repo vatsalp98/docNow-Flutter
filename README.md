@@ -7,7 +7,6 @@ A new approach to booking Medical Experts in underdeveloped countries to improve
 ## Authors
 
 - [@vatsalp98](https://www.github.com/vatsalp98)
-- [@labiguime](https://www.github.com/labiguime)
 
 
 ## Tech Stack
