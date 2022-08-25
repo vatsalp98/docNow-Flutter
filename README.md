@@ -1,16 +1,18 @@
-# docnow
 
-A new Flutter project.
+# Doc Now
 
-## Getting Started
+A new approach to booking Medical Experts in underdeveloped countries to improve accessibility to basic human health services.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Authors
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [@vatsalp98](https://www.github.com/vatsalp98)
+- [@labiguime](https://www.github.com/labiguime)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Tech Stack
+
+**Client:** Flutter, React, TailwindCSS
+
+**Server:** AWS Amplify, GraphQL, Next
+
