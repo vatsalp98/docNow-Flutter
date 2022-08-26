@@ -24,7 +24,7 @@ type User @model
 type Booking @model 
   @auth(rules: [
     { allow: groups, groups: ["admin"] },
-    { allow: public, operations: [read, create] },
+    { allow: public, operations: [read, create, update, delete] },
     { allow: private, operations: [read, create, update, delete] }
   ])
 {

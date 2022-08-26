@@ -3,6 +3,40 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:week_of_year/week_of_year.dart';
 
 class DataRepo {
+  static fetchClinicInfo(String id) async {
+    String gDoc = '''query Mquery(\$id: ID!){
+      getClinic(id: \$id) {
+        id
+        location
+        name
+        serviceLanguages
+        services
+      }
+    }''';
+    try {
+      final operation = Amplify.API.query(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {
+            "id": id,
+          },
+        ),
+      );
+      var response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
   static fetchDoctors() async {
     String gDoc = '''query MyQuery {
       listUsers(filter: {isDoctor: {eq: true}, isSpecialist: {ne: true}}) {
@@ -264,6 +298,73 @@ class DataRepo {
             'id': id,
             "totalSlots": totalSlots - 1,
           },
+        ),
+      );
+      final response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
+  static fetchUserBookings() async {
+    final user = await Amplify.Auth.getCurrentUser();
+    String gDoc = '''query Mquery(\$eq: ID){
+      listBookings(filter: {patient_id: {eq: \$eq}}) {
+        items {
+          booking_date
+          clinic_id
+          doctor_id
+          id
+          isActive
+          location
+          booking_time
+        }
+      }
+    }''';
+    try {
+      final operation = await Amplify.API.query(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {
+            "eq": user.userId,
+          },
+        ),
+      );
+      final response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
+  static deleteBooking(String id) async {
+    String gDoc = '''mutation Mmutation(\$id: ID!){
+      deleteBooking(input: {id: \$id}) {
+        id
+      }
+    }''';
+    try {
+      final operation = Amplify.API.mutate(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {"id": id},
         ),
       );
       final response = await operation.response;
