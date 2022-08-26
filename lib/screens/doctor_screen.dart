@@ -3,6 +3,7 @@ import 'package:docnow/widgets/emailButton.dart';
 import 'package:docnow/widgets/messageButton.dart';
 import 'package:docnow/widgets/servicesList.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hex_color/flutter_hex_color.dart';
 
 import '../widgets/voiceCallButton.dart';
 
@@ -99,8 +100,22 @@ class _DoctorScreenState extends State<DoctorScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 35.0),
               child: Center(
-                child: bookNowButton(
-                    widget.doctorData['id'], widget.doctorData['clinic_id']),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    maximumSize: MaterialStateProperty.all(Size(200, 50)),
+                    minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                    backgroundColor:
+                        MaterialStateProperty.all(HexColor('#224fb1')),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    'Book Now',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:docnow/widgets/dailyActiveHourRow.dart';
+import 'package:docnow/widgets/dailyBookingSlotsLoaded.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_of_year/week_of_year.dart';
@@ -33,7 +36,7 @@ class ActiveHourScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Please setup a schedule for the week:',
+                        'Please setup the number of active slots for this week:',
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -43,7 +46,7 @@ class ActiveHourScreen extends StatelessWidget {
                         padding: EdgeInsets.only(top: 10),
                       ),
                       Text(
-                        'Week Number: ${DateTime.now().weekOfYear}',
+                        'Week Number: ${DateTime.now().weekOfYear}  (${DateTime.now().year})',
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey[600],
@@ -79,22 +82,51 @@ class ActiveHourScreen extends StatelessWidget {
                 ),
               );
             } else if (state is ScheduleLoaded) {
-              return Container(
-                child: Text('Loaded'),
+              print(state.scheduleList);
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+                    Text(
+                      'Week of ${DateFormat('EEE. dd MMM. yyyy').format(DateTime.parse(state.scheduleList[0]["date"]))}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 20)),
+                    for (var item in state.scheduleList)
+                      DailyBookingSlotsLoaded(
+                        item["date"],
+                        "10:00 AM to 06:00 PM",
+                        item["totalSlots"].toString(),
+                      ),
+                    const Padding(padding: EdgeInsets.only(top: 20)),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text('Update'),
+                      ),
+                    ),
+                  ],
+                ),
               );
             } else if (state is ScheduleLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is ScheduleSaved) {
               return AlertDialog(
-                content: Text('Your Schedule has been saved!'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
+                content: Column(
+                  children: [
+                    Icon(
+                      Icons.done_rounded,
+                      color: Colors.green,
+                      size: 40,
+                    ),
+                    Text('Your Schedule has been saved!'),
+                  ],
+                ),
               );
             } else {
               return Center(child: Text('There was an error loading!'));

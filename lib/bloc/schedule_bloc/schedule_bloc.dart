@@ -51,6 +51,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     var scheduleData = await DataRepo.fetchActiveHours(event.weekNumber);
     if (scheduleData['listActiveHours']['items'].length == 0) {
       emit(ScheduleInitial());
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('slotMap');
     } else {
       print('SCHEDULE DATA:' +
           scheduleData['listActiveHours']['items'].toString());
@@ -87,8 +89,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       for (var slot in slotMap['slots']) {
         var response = await DataRepo.createActiveHours(
             slot['totalSlots'], event.weekNumber, slot['date']);
+        slot['id'] = response['createActiveHours']['id'];
       }
+      final success = await prefs.remove('slotMap');
       emit(ScheduleSaved());
+      emit(ScheduleLoaded(scheduleList: slotMap['slots']));
     }
   }
 
