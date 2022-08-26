@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:week_of_year/week_of_year.dart';
 
 class DataRepo {
   static fetchDoctors() async {
@@ -157,6 +158,115 @@ class DataRepo {
         ),
       );
       var response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
+  static fetchSlotsForBookingDay() async {
+    final user = await Amplify.Auth.getCurrentUser();
+    print(user.userId);
+    String gDoc = '''query Mquery(\$eq: ID, \$eq1: Int){
+      listActiveHours(filter: {user_id: {eq: \$eq}, weekNumber: {eq: \$eq1}}) {
+        items {
+          id
+          totalSlots
+          date
+          user_id
+          weekNumber
+        }
+      }
+    }''';
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {
+            "eq": user.userId,
+            "eq1": DateTime.now().weekOfYear,
+          },
+        ),
+      );
+      var response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
+  static createBooking(Map bookingData) async {
+    print(bookingData);
+    String gDoc =
+        '''mutation Mmutation (\$booking_date: AWSDateTime!, \$booking_time: AWSDateTime!, \$clinic_id: ID!, \$doctor_id: ID!, \$isActive: Boolean!, \$location: String, \$patient_id: ID) {
+      createBooking(input: {booking_date: \$booking_date, booking_time: \$booking_time, clinic_id: \$clinic_id, doctor_id: \$doctor_id, isActive: \$isActive, location: \$location, patient_id: \$patient_id}) {
+        id
+      }
+    }''';
+    try {
+      final operation = Amplify.API.mutate(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {
+            "doctor_id": bookingData["doctor_id"],
+            "clinic_id": bookingData["clinic_id"],
+            "booking_date": bookingData["date"],
+            "booking_time": bookingData["date"],
+            "isActive": false,
+            "location": bookingData["location"],
+            "patient_id": bookingData["patient_id"],
+          },
+        ),
+      );
+      var response = await operation.response;
+      if (response.errors.isNotEmpty) {
+        response.errors.forEach((element) {
+          print(element.message);
+        });
+      } else {
+        final data = json.decode(response.data);
+        return data;
+      }
+    } on ApiException catch (e) {
+      throw (e);
+    }
+  }
+
+  static updateActiveHoursSlot(int totalSlots, String id) async {
+    String gDoc = '''mutation Mmutation(\$id: ID!, \$totalSlots: Int){
+      updateActiveHours(input: {id: \$id, totalSlots: \$totalSlots}) {
+        id
+        totalSlots
+      }
+    }''';
+    try {
+      final operation = Amplify.API.mutate(
+        request: GraphQLRequest(
+          document: gDoc,
+          apiName: 'docnow',
+          variables: {
+            'id': id,
+            "totalSlots": totalSlots - 1,
+          },
+        ),
+      );
+      final response = await operation.response;
       if (response.errors.isNotEmpty) {
         response.errors.forEach((element) {
           print(element.message);

@@ -7,7 +7,10 @@ class BookingInitial extends BookingState {}
 
 class BookingLoading extends BookingState {}
 
-class BookingLoaded extends BookingState {}
+class BookingLoaded extends BookingState {
+  BookingLoaded({required this.bookingData});
+  final Map bookingData;
+}
 
 class BookingSaved extends BookingState {}
 

@@ -2,7 +2,6 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:docnow/helpers/bottom_navigation_dash.dart';
 import 'package:docnow/helpers/configure_amplify.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
@@ -11,9 +10,9 @@ void main() async {
   configureAmplify();
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('fr')],
+      supportedLocales: const [Locale('en'), Locale('fr')],
       path: 'assets/languages',
-      fallbackLocale: Locale('en'),
+      fallbackLocale: const Locale('en'),
       child: const MyApp(),
     ),
   );

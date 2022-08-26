@@ -1,5 +1,7 @@
 import 'package:docnow/screens/doctor_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/booking_bloc/booking_bloc.dart';
 import '../repositories/data_repo.dart';
 
 Widget homeDocCard(BuildContext context, String id, String title, String clinic,
@@ -7,9 +9,13 @@ Widget homeDocCard(BuildContext context, String id, String title, String clinic,
   return GestureDetector(
     onTap: () async {
       final dataMap = await DataRepo.fetchDoctorInfo(id);
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return DoctorScreen(doctorData: dataMap);
-      }));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return DoctorScreen(doctorData: dataMap);
+          },
+        ),
+      );
     },
     child: Card(
       shape: RoundedRectangleBorder(

@@ -59,7 +59,7 @@ type Clinic @model
 type ActiveHours @model 
   @auth(rules: [
     { allow: groups, groups: ["admin"] },
-    { allow: public, operations: [read, create] },
+    { allow: public, operations: [read, create, update] },
     { allow: private, operations: [read, create, update, delete] }
   ]) 
 {

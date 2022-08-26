@@ -1,5 +1,4 @@
-import 'package:docnow/bloc/booking_bloc/booking_bloc.dart';
-import 'package:docnow/bloc/schedule_bloc/schedule_bloc.dart';
+import '../bloc/booking_bloc/booking_bloc.dart';
 import 'package:docnow/screens/bookings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,15 +30,10 @@ class _DashboardState extends State<Dashboard> {
         //   elevation: 0,
         //   foregroundColor: Colors.transparent,
         // ),
-        body: MultiBlocProvider(
-          providers: [
-            BlocProvider<BookingBloc>(create: (context) => BookingBloc()),
-          ],
-          child: Center(
-            child: IndexedStack(
-              index: currentIndex,
-              children: screens,
-            ),
+        body: Center(
+          child: IndexedStack(
+            index: currentIndex,
+            children: screens,
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(

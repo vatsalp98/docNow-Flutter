@@ -1,10 +1,13 @@
+import 'package:docnow/screens/newBooking_screen.dart';
 import 'package:docnow/widgets/bookNowButton.dart';
 import 'package:docnow/widgets/emailButton.dart';
 import 'package:docnow/widgets/messageButton.dart';
 import 'package:docnow/widgets/servicesList.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hex_color/flutter_hex_color.dart';
 
+import '../bloc/booking_bloc/booking_bloc.dart';
 import '../widgets/voiceCallButton.dart';
 
 class DoctorScreen extends StatefulWidget {
@@ -107,7 +110,22 @@ class _DoctorScreenState extends State<DoctorScreen> {
                     backgroundColor:
                         MaterialStateProperty.all(HexColor('#224fb1')),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return BlocProvider<BookingBloc>(
+                            create: (context) =>
+                                BookingBloc()..add(UserLoadsBookingEvent()),
+                            child: NewBookingScreen(
+                              doctorData: widget.doctorData,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                   child: Text(
                     'Book Now',
                     style: TextStyle(
